@@ -20,4 +20,16 @@ MPI_Datatype get_type() {
   }
 }
 
+template<typename T>
+void MPI_MEAN(T *sendbuf, T *recvbuf) {
+    T sum;
+    MPI_Allreduce((const void *) sendbuf, (void *) &sum, 1,
+                  get_type<T>(), MPI_SUM, MPI_COMM_WORLD);
+
+    int world_size;
+    MPI_Comm_size(MPI_COMM_WORLD, &world_size);
+
+    *recvbuf = sum / static_cast<T>(world_size);
+}
+
 #endif // MPI_HELPER_H
