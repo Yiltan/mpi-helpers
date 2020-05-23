@@ -11,9 +11,10 @@ int main(int argc, char** argv) {
 
   double send_val = 1.234 * static_cast<double>(world_rank);
   double std_val = 0.0;
+  double mean_val = 0.0;
 
   // Test
-  MPI_STD<double>(&send_val, &std_val);
+  MPI_MEAN<double>(&send_val, &mean_val, &std_val);
 
   // Check answer
   int world_size;
@@ -38,6 +39,10 @@ int main(int argc, char** argv) {
     double err = expected_std - std_val;
     std::cout << "The difference from the expected standard deviation is: "
               << err << std::endl;
+
+    double mean_err = mean - mean_val;
+    std::cout << "The difference from the expected mean is: "
+              << mean_err << std::endl;
   }
 
   MPI_Finalize();
